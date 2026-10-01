@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07070b">
+<title>DarkChat — IA</title>
+<style>
+:root{--bg:#07070b;--pn:#0f0f16;--pn2:#15151f;--bd:#292934;--tx:#f4f4f7;--mt:#90909d;--ac:#ff2d4a;--ac2:#ff6172}
+*{box-sizing:border-box;margin:0}html,body{height:100%;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+body{overflow:hidden;background:radial-gradient(ellipse at top,#2a0a12 0,var(--bg) 55%)}
+button,input,textarea{font:inherit}button{cursor:pointer}
+#app{height:100%;display:flex;flex-direction:column}
+header{display:flex;gap:10px;align-items:center;padding:12px;padding-top:calc(12px + env(safe-area-inset-top))}
+.ib{width:44px;height:44px;border-radius:50%;border:1px solid var(--bd);background:var(--pn);color:var(--tx);font-size:20px}.crown{background:var(--ac);border:0}
+.sel{flex:1;border:1px solid var(--bd);background:var(--pn);border-radius:26px;padding:12px 16px;font-size:14px}
+main{flex:1;overflow-y:auto;padding:8px 16px 16px}
+.msg{margin:14px 0;line-height:1.6;font-size:16px;white-space:pre-wrap;word-wrap:break-word;user-select:text}
+.u{margin-left:auto;max-width:88%;width:fit-content;background:var(--pn2);border:1px solid var(--bd);border-radius:16px;padding:12px 16px}.bot b.n{display:block;color:var(--ac2);font-size:13px;letter-spacing:2px;margin-bottom:4px}
+.hero{text-align:center;margin-top:12vh}.hero h1{font-size:40px;line-height:1.05}.hero h1 span{color:var(--ac)}.hero p{color:var(--mt);margin-top:12px}
+.sug{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:20px}.sug button{background:var(--pn);border:1px solid var(--bd);color:var(--tx);border-radius:20px;padding:10px 14px;font-size:13px}
+.bar{display:flex;gap:8px;align-items:flex-end;margin:8px 12px 12px;padding:8px 8px 8px 16px;border:1.5px solid var(--ac);border-radius:28px;background:var(--bg);box-shadow:0 0 18px #ff2d4a33}
+textarea{flex:1;background:none;border:0;outline:0;color:var(--tx);font-size:16px;resize:none;max-height:120px;padding:8px 0}.send{width:44px;height:44px;border-radius:50%;border:0;background:var(--ac);color:#fff;font-size:20px}.send:disabled{opacity:.4}
+#side{position:fixed;inset:0;display:none;z-index:5}#side.on{display:flex}#side .p{width:78%;max-width:340px;background:var(--bg);border-right:1px solid var(--ac);padding:20px 16px;padding-top:calc(20px + env(safe-area-inset-top));display:flex;flex-direction:column;gap:6px;overflow-y:auto}#side .o{flex:1;background:#000a}
+.logo{font-size:24px;font-weight:800;letter-spacing:1px;display:flex;justify-content:space-between;align-items:center}.logo span{color:var(--ac)}
+.lang{display:flex;border:1px solid var(--bd);border-radius:20px;overflow:hidden;font-size:12px}.lang button{background:none;border:0;color:var(--mt);padding:6px 10px}.lang .a{background:var(--ac);color:#fff}
+.nc,.cta{background:linear-gradient(var(--ac2),var(--ac));border:0;color:#fff;font-weight:700;letter-spacing:1px;border-radius:26px;padding:14px;cursor:pointer}.nc{margin:12px 0}
+.sec{color:var(--mt);font-size:11px;letter-spacing:2px;margin:12px 0 4px}.it{display:flex;justify-content:space-between;background:none;border:0;color:var(--tx);font-size:16px;font-weight:600;padding:12px 8px;border-radius:10px;text-align:left}.it.c{background:#2a0a12;font-weight:400;font-size:14px;gap:10px}.it.c span:first-child{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sp{flex:1}
+.box{border:1px solid #ff2d4a66;border-radius:14px;padding:14px;background:var(--pn);margin-top:10px;font-size:14px}.box h4{color:var(--ac2);letter-spacing:2px;font-size:13px;margin-bottom:6px}.small{color:var(--mt);font-size:12px;text-align:center;margin-top:8px}
+#plans{position:fixed;inset:0;background:var(--bg);z-index:6;display:none;overflow-y:auto;padding:16px;padding-top:calc(16px + env(safe-area-inset-top))}#plans.on{display:block}
+.card{border:1px solid var(--bd);background:var(--pn);border-radius:22px;padding:20px;margin:16px 0}.card.rec{border-color:var(--ac);box-shadow:0 0 24px #ff2d4a33}.card h3{font-size:26px}.price{font-size:42px;font-weight:800;margin:10px 0 2px}.price small{font-size:14px;color:var(--mt);font-weight:400}.cr{color:var(--ac2);font-weight:600;margin:6px 0 12px}.card li{list-style:none;padding:5px 0 5px 24px;position:relative;font-size:14px}.card li:before{content:"✓";color:var(--ac);position:absolute;left:0}.cta{width:100%;margin-top:14px}.tag{display:inline-block;background:var(--ac);border-radius:12px;padding:3px 12px;font-size:11px;letter-spacing:2px;margin-bottom:8px}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:10px 4px;text-align:right;border-top:1px solid var(--bd)}th{font-size:11px;color:var(--mt);letter-spacing:1px;border:0}td:first-child,th:first-child{text-align:left}
+.md{position:fixed;inset:0;background:#000c;z-index:9;display:none;align-items:center;justify-content:center;padding:16px}.md.on{display:flex}.mb{width:100%;max-width:400px;background:var(--pn);border:1px solid var(--ac);border-radius:22px;padding:22px;box-shadow:0 0 30px #ff2d4a44;position:relative}.mb h3{font-size:22px;margin-bottom:12px}.mb input{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:13px;color:var(--tx);font-size:16px;margin-bottom:10px;outline:0}.mb input:focus{border-color:var(--ac)}.x{position:absolute;top:10px;right:14px;background:none;border:0;color:var(--mt);font-size:20px}.lk{background:none;border:0;color:var(--ac2);margin-top:12px;font-size:14px;width:100%}.er{color:var(--ac2);font-size:13px;min-height:18px}.key{background:var(--bg);border:1px dashed var(--ac);border-radius:12px;padding:14px;text-align:center;font-size:20px;letter-spacing:1px;margin:10px 0;word-break:break-all}.mb p{color:var(--mt);font-size:14px;line-height:1.5}
+.cb{margin:10px 0;border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:#05050a;white-space:normal}.ch{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--bd);font-size:11px;letter-spacing:2px;color:var(--ac2)}.ch button{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:16px;padding:6px 12px;font-size:11px;margin-left:6px}pre{padding:12px;overflow-x:auto;white-space:pre;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;user-select:text}
+.admin{max-height:70vh;overflow:auto}.stat{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.stat div{background:var(--bg);border:1px solid var(--bd);border-radius:14px;padding:12px}.stat b{font-size:22px;display:block}.stat span{font-size:11px;color:var(--mt)}
+@media(max-width:480px){.hero h1{font-size:34px}.msg{font-size:15px}}
+</style>
+</head>
+<body>
+<div id="app">
+<header><button class="ib" id="menu">☰</button><div class="sel">DarkChat · Claude</div><button class="ib crown" id="crown">♛</button></header>
+<main id="chat"></main>
+<div class="bar"><textarea id="in" rows="1" placeholder="Digite sua mensagem..."></textarea><button class="send" id="go">↑</button></div>
+</div>
+
+<div id="side"><div class="p">
+<div class="logo"><div>DARK <span>CHAT</span></div><div class="lang"><button id="lp">PT</button><button id="le">EN</button></div></div>
+<button class="nc" id="nc"></button>
+<div class="sec" id="sAcc"></div>
+<button class="it" id="use"><span id="tUse"></span><span id="cnt">0</span></button>
+<button class="it" id="sub"><span id="tSub"></span></button>
+<button class="it" id="adm" style="display:none">⚙ Admin</button>
+<div class="sec" id="sCv"></div><div id="list"></div><div class="sp"></div>
+<div class="box"><h4 id="tGo"></h4><div id="tGo2"></div></div><div class="box" id="anb"></div><div class="small" id="tNote"></div>
+</div><div class="o" id="ov"></div></div>
+
+<div id="plans"><button class="ib" id="pc">✕</button><div style="text-align:center;margin-top:10px"><h1 style="font-size:38px;line-height:1.05">IA SEM <span style="color:var(--ac)">LIMITES</span></h1><p id="pSub" style="color:var(--mt);margin-top:10px"></p></div><div id="cards"></div>
+<div class="card"><h4 id="pHow" style="color:var(--ac2);letter-spacing:2px"></h4><p id="pHow2" style="color:var(--mt);font-size:14px;margin:8px 0"></p><table><tr><th>PLANO</th><th id="h1"></th><th id="h2"></th><th id="h3"></th></tr><tr><td>Starter</td><td>95.000</td><td>7.916</td><td>1.055</td></tr><tr><td>Pro</td><td>205.000</td><td>17.083</td><td>2.277</td></tr><tr><td>Max</td><td>530.000</td><td>44.166</td><td>5.888</td></tr></table></div><p class="small" id="pDemo"></p></div>
+<div class="md" id="md"></div>
+
+<script>
+const T={
+pt:{nc:"+ NOVA CONVERSA",acc:"CONTA",cv:"CONVERSAS",use:"Uso",sub:"Assinatura",go:"SEM LIMITES",go2:"Milhares de mensagens a partir de €9,99.",an:"Sessão anônima",an2:"Presa a este navegador. Limpar o cache apaga tudo.",note:"Você é responsável pelo seu uso.",ph:"Digite sua mensagem...",h:"IA sem",hp:"Converse, programe e crie. Comece agora.",sug:["Crie um app em HTML","Resuma um texto","Ideias de negócio","Explique algo simples"],psub:"Escolha seu plano. Sem fidelidade, cancele em um clique.",cta:"CRIAR CONTA",mo:"/ mês",cr:" créditos renovados todo mês",rec:"RECOMENDADO",how:"QUANTAS MENSAGENS, NA PRÁTICA?",how2:"Um crédito é uma unidade de computação, não uma mensagem. Valores estimados.",c1:"CURTA",c2:"COM CONTEXTO",c3:"VISÃO",demo:"Página demonstrativa: nenhum pagamento é processado.",err:"Erro ao responder. Tente de novo.",lg:"Entrar",rg:"Criar conta",em:"E-mail",pw:"Senha (6+ caracteres)",out:"Sair",noacc:"Não tem conta? Criar conta",hasacc:"Já tem conta? Entrar",bad:"E-mail ou senha incorretos",ex:"E-mail já cadastrado",inv:"Dados inválidos",pixT:"Pagar com Pix",pixK:"Chave Pix (copie e cole no app do seu banco)",cp:"COPIAR CHAVE",cpd:"COPIADA ✓",paid:"JÁ PAGUEI",pend:"Pagamento em análise. Envie o comprovante para confirmar a ativação do plano.",pl:"Plano",d1:"Uso diário confortável.",d2:"Para uso intenso.",d3:"Sem pensar duas vezes.",f:["Todos os modelos","Contexto longo","Suporte por e-mail","Cancele em um clique"]},
+en:{nc:"+ NEW CONVERSATION",acc:"ACCOUNT",cv:"CONVERSATIONS",use:"Usage",sub:"Subscription",go:"GO UNLIMITED",go2:"Thousands of messages from €9.99.",an:"Anonymous session",an2:"Tied to this browser. Clearing the cache erases everything.",note:"You remain responsible for your use.",ph:"Type your message...",h:"AI without",hp:"Chat, code and create. Start now.",sug:["Build an HTML app","Summarize a text","Business ideas","Explain something simply"],psub:"Choose your plan. No commitment, cancel in one click.",cta:"CREATE AN ACCOUNT",mo:"/ month",cr:" credits renewed every month",rec:"RECOMMENDED",how:"HOW MANY MESSAGES, IN PRACTICE?",how2:"A credit is a unit of compute, not a message. Estimates only.",c1:"SHORT",c2:"WITH CONTEXT",c3:"VISION",demo:"Demo page: no payment is processed.",err:"Error replying. Try again.",lg:"Sign in",rg:"Create account",em:"Email",pw:"Password (6+ chars)",out:"Sign out",noacc:"No account? Create one",hasacc:"Have an account? Sign in",bad:"Wrong email or password",ex:"Email already registered",inv:"Invalid data",pixT:"Pay with Pix",pixK:"Pix key (copy and paste in your bank app)",cp:"COPY KEY",cpd:"COPIED ✓",paid:"I HAVE PAID",pend:"Payment under review. Send the receipt to confirm plan activation.",pl:"Plan",d1:"Comfortable daily use.",d2:"For intensive use.",d3:"No second thoughts.",f:["Every model","Long context","Email support","Cancel in one click"]}
+};
+let U=null,ACC={},PEND=null,L="pt",convs=[],cur=null,usage=0,busy=false;
+const $=id=>document.getElementById(id);
+try{const s=JSON.parse(localStorage.getItem("dc")||"null");if(s){convs=s.c||[];usage=s.u||0;L=s.l||"pt";U=s.s||null;ACC=s.a||{};PEND=s.p||null}}catch(e){}
+const t=k=>T[L][k];
+function save(){try{localStorage.setItem("dc",JSON.stringify({c:convs,u:usage,l:L,s:U,a:ACC,p:PEND}))}catch(e){}}
+function esc(x){return String(x).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
+function cc(){return convs.find(c=>c.id===cur)}
+async function hash(x){try{return Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(x)))).map(v=>v.toString(16).padStart(2,"0")).join("")}catch(e){return btoa(unescape(encodeURIComponent(x)))}}
+
+function labels(){
+$("nc").textContent=t("nc");$("sAcc").textContent=t("acc");$("sCv").textContent=t("cv");$("tUse").textContent=t("use");$("tSub").textContent=t("sub");
+$("adm").style.display=U&&U.admin?"flex":"none";$("tGo").textContent="♛ "+t("go");$("tGo2").textContent=t("go2");$("tNote").textContent=t("note");$("in").placeholder=t("ph");$("cnt").textContent=usage;
+$("pSub").textContent=t("psub");$("pHow").textContent=t("how");$("pHow2").textContent=t("how2");$("h1").textContent=t("c1");$("h2").textContent=t("c2");$("h3").textContent=t("c3");$("pDemo").textContent=t("demo");
+$("lp").className=L==="pt"?"a":"";$("le").className=L==="en"?"a":"";
+$("anb").innerHTML=U?'<h4>● '+esc(U.e)+'</h4><div>'+(PEND&&PEND.e===U.e?t("pl")+" "+esc(PEND.p)+": "+(PEND.ok?(L==="pt"?"ativo":"active"):(L==="pt"?"em análise":"pending")):"")+'</div><button class="cta" id="lo" style="margin-top:8px;padding:10px">'+t("out")+'</button>':'<h4>● '+t("an")+'</h4><div>'+t("an2")+'</div><button class="cta" id="li" style="margin-top:8px;padding:10px">'+t("lg")+' / '+t("rg")+'</button>';
+if($("lo"))$("lo").onclick=()=>{U=null;save();labels()};if($("li"))$("li").onclick=()=>{closeSide();auth("in")};
+const P=[["Starter","9,99","95.000",t("d1"),0],["Pro","19,99","205.000",t("d2"),1],["Max","49,99","530.000",t("d3"),0]];
+$("cards").innerHTML=P.map(p=>'<div class="card '+(p[4]?"rec":"")+'">'+(p[4]?'<span class="tag">'+t("rec")+'</span>':'')+'<h3>'+p[0].toUpperCase()+'</h3><p style="color:var(--mt);font-size:14px">'+p[3]+'</p><div class="price">'+p[1]+' € <small>'+t("mo")+'</small></div><div class="cr">'+p[2]+t("cr")+'</div><ul>'+t("f").map(f=>"<li>"+f+"</li>").join("")+'</ul><button class="cta" data-p="'+p[0]+'|'+p[1]+'">'+(L==="pt"?"ASSINAR":"SUBSCRIBE")+'</button></div>').join("");
+document.querySelectorAll(".cta[data-p]").forEach(b=>b.onclick=()=>{const q=b.dataset.p.split("|");if(!U){auth("in",q);return}pix(q)});
+$("list").innerHTML=convs.map(c=>'<button class="it c" data-id="'+c.id+'"><span>'+esc(c.title).slice(0,30)+'</span><span>'+Math.ceil(c.m.length/2)+'</span></button>').join("");
+document.querySelectorAll("#list .it").forEach(b=>b.onclick=()=>{cur=b.dataset.id;closeSide();render()});
+render();
+}
+function fmt(x){
+return String(x).split("```").map((q,i)=>{if(i%2===0)return esc(q);let n=q.indexOf("\n"),g=n>-1?q.slice(0,n).trim():"",c=n>-1?q.slice(n+1):q;return '<div class="cb"><div class="ch"><span>'+esc((g||"code").toUpperCase())+'</span><span><button data-a="c">'+(L==="pt"?"COPIAR":"COPY")+'</button><button data-a="d" data-g="'+esc(g)+'">'+(L==="pt"?"BAIXAR":"DOWNLOAD")+'</button></span></div><pre>'+esc(c)+'</pre></div>'}).join("")
+}
+function cp(x,b){const done=()=>{const o=b.textContent;b.textContent="✓";setTimeout(()=>b.textContent=o,1000)};if(navigator.clipboard)navigator.clipboard.writeText(x).then(done).catch(()=>fallback(x,done));else fallback(x,done)}
+function fallback(x,done){const a=document.createElement("textarea");a.value=x;document.body.appendChild(a);a.select();try{document.execCommand("copy");done()}catch(e){}a.remove()}
+function dl(x,g){const ext=(g||"txt").replace(/[^a-z0-9]/gi,"")||"txt",a=document.createElement("a");a.href=URL.createObjectURL(new Blob([x],{type:"text/plain"}));a.download="darkchat-code."+ext;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function render(){
+const c=cc();let h="";
+if(!c||!c.m.length)h='<div class="hero"><h1>'+t("h")+'<br><span>'+(L==="pt"?"LIMITES":"LIMITS")+'</span></h1><p>'+t("hp")+'</p><div class="sug">'+t("sug").map(s=>'<button>'+s+'</button>').join("")+'</div></div>';
+else h=c.m.map(m=>m.r==="user"?'<div class="msg u">'+esc(m.c)+'</div>':'<div class="msg bot"><b class="n">DARKCHAT</b>'+fmt(m.c)+'</div>').join("");
+$("chat").innerHTML=h;document.querySelectorAll(".sug button").forEach(b=>b.onclick=()=>{$("in").value=b.textContent;send()});
+document.querySelectorAll(".cb button").forEach(b=>b.onclick=()=>{const x=b.closest(".cb").querySelector("pre").textContent;b.dataset.a==="c"?cp(x,b):dl(x,b.dataset.g)});
+$("chat").scrollTop=$("chat").scrollHeight;
+}
+function closeSide(){$("side").className=""}
+function modal(h){$("md").innerHTML='<div class="mb"><button class="x" id="mx">✕</button>'+h+'</div>';$("md").className="md on";$("mx").onclick=()=>{$("md").className="md"}}
+function auth(mode,plan){
+modal('<h3>'+(mode==="in"?t("lg"):t("rg"))+'</h3><input id="ae" type="text" placeholder="'+t("em")+'"><input id="ap" type="password" placeholder="'+t("pw")+'"><div class="er" id="ar"></div><button class="cta" id="ab">'+(mode==="in"?t("lg"):t("rg")).toUpperCase()+'</button><button class="lk" id="at">'+(mode==="in"?t("noacc"):t("hasacc"))+'</button>');
+$("at").onclick=()=>auth(mode==="in"?"up":"in",plan);
+$("ab").onclick=async()=>{
+const e=$("ae").value.trim().toLowerCase(),p=$("ap").value;
+if(mode==="in"&&e==="jhon"&&p==="123"){U={e:"Jhon",admin:true};save();$("md").className="md";labels();return}
+if(!/^\S+@\S+\.\S+$/.test(e)||(mode==="up"&&p.length<6)){$("ar").textContent=t("inv");return}
+const h=await hash(p+e);
+if(mode==="up"){if(ACC[e]){$("ar").textContent=t("ex");return}ACC[e]=h}else if(ACC[e]!==h){$("ar").textContent=t("bad");return}
+U={e,admin:false};save();$("md").className="md";labels();if(plan)pix(plan);
+};
+}
+function pix(q){
+const key="00020126580014BR.GOV.BCB.PIX0136darkchat-demo@pix.local5204000053039865802BR5910DARKCHAT6009SAO PAULO62070503***6304DEMO";
+modal('<h3>♛ '+t("pixT")+'</h3><p>'+t("pixK")+'</p><div class="key" id="pk">'+key+'</div><button class="cta" id="copykey">'+t("cp")+'</button><button class="cta" id="paid">'+t("paid")+'</button><p style="margin-top:12px">'+t("pend")+'</p>');
+$("copykey").onclick=()=>cp(key,$("copykey"));
+$("paid").onclick=()=>{PEND={e:U.e,p:q[0],ok:false};save();$("md").className="md";labels();alert(t("pend"))};
+}
+function admin(){
+const users=Object.keys(ACC).length, messages=convs.reduce((n,c)=>n+c.m.filter(m=>m.r==="user").length,0);
+modal('<div class="admin"><h3>⚙ Painel Admin</h3><div class="stat"><div><b>'+users+'</b><span>CONTAS</span></div><div><b>'+convs.length+'</b><span>CONVERSAS</span></div><div><b>'+messages+'</b><span>MENSAGENS</span></div><div><b>'+usage+'</b><span>USO LOCAL</span></div></div><p>Administrador demonstrativo. Os dados desta versão ficam no navegador.</p><button class="cta" id="reset">LIMPAR CONVERSAS</button><button class="cta" id="export">EXPORTAR DADOS</button></div>');
+$("reset").onclick=()=>{if(confirm("Apagar todas as conversas?")){convs=[];cur=null;save();$("md").className="md";labels()}};
+$("export").onclick=()=>{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify({convs,usage,accounts:Object.keys(ACC)},null,2)],{type:"application/json"}));a.download="darkchat-backup.json";a.click()};
+}
+async function send(){
+const v=$("in").value.trim();if(!v||busy)return;
+let key="";try{key=localStorage.getItem("dc_key")||""}catch(e){}
+const c=cc()||(()=>{const n={id:""+Date.now(),title:v,m:[]};convs.unshift(n);cur=n.id;return n})();
+c.m.push({r:"user",c:v});c.m.push({r:"assistant",c:"..."});
+$("in").value="";usage++;busy=true;$("go").disabled=true;render();
+const bot=c.m[c.m.length-1];
+try{
+if(!key){
+bot.c="Modo demonstração: conecte uma API de IA no backend para receber respostas reais. A interface, contas e conversas locais já estão funcionando.";
+}else{
+const turns=c.m.slice(0,-1).slice(-19).map(m=>({role:m.r==="assistant"?"assistant":"user",content:m.c}));
+const rs=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-5",max_tokens:2048,messages:turns})});
+const dd=await rs.json();if(!rs.ok)throw Error(dd?.error?.message||("HTTP "+rs.status));
+bot.c=(dd.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("")||t("err");
+}
+}catch(e){bot.c=e.message||t("err")}
+busy=false;$("go").disabled=false;save();labels();
+}
+$("go").onclick=send;
+$("in").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey&&!/Mobi|Android/i.test(navigator.userAgent)){e.preventDefault();send()}};
+$("in").oninput=()=>{$("in").style.height="auto";$("in").style.height=Math.min($("in").scrollHeight,120)+"px"};
+$("menu").onclick=()=>$("side").className="on";$("ov").onclick=closeSide;$("nc").onclick=()=>{cur=null;closeSide();render()};
+$("crown").onclick=$("sub").onclick=()=>{$("plans").className="on";closeSide()};
+$("pc").onclick=()=>$("plans").className="";
+$("lp").onclick=()=>{L="pt";save();labels()};$("le").onclick=()=>{L="en";save();labels()};
+$("adm").onclick=admin;
+labels();
+</script>
+</body>
+</html>
